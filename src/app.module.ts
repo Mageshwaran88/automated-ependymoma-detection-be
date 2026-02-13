@@ -15,12 +15,12 @@ import { ScansModule } from './scans/scans.module';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
-        const isProduction = config.get('NODE_ENV') === 'production';
+        const dbUrl = config.get<string>('DATABASE_URL');
 
-        if (isProduction) {
+        if (dbUrl) {
           return {
             type: 'postgres',
-            url: config.get<string>('DATABASE_URL'),
+            url: dbUrl,
             autoLoadEntities: true,
             synchronize: false,
             ssl: {
@@ -29,6 +29,7 @@ import { ScansModule } from './scans/scans.module';
           };
         }
 
+        // fallback local
         return {
           type: 'postgres',
           host: 'localhost',
@@ -39,7 +40,7 @@ import { ScansModule } from './scans/scans.module';
           autoLoadEntities: true,
           synchronize: true,
         };
-      },
+      }
     }),
 
     ScansModule,
@@ -47,4 +48,4 @@ import { ScansModule } from './scans/scans.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
