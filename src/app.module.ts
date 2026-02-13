@@ -7,21 +7,41 @@ import { ScansModule } from './scans/scans.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (config: ConfigService) => ({
-        type: 'postgres',
-        host: config.get('DB_HOST', 'localhost'),
-        port: parseInt(config.get('DB_PORT', '5432'), 10),
-        username: config.get('DB_USERNAME', 'root'),
-        password: config.get('DB_PASSWORD', 'root'),
-        database: config.get('DB_DATABASE', 'automated-ependymoma-detection'),
-        autoLoadEntities: true,
-        synchronize: true, // set to false in production
-      }),
       inject: [ConfigService],
+      useFactory: (config: ConfigService) => {
+        const isProduction = config.get('NODE_ENV') === 'production';
+
+        if (isProduction) {
+          return {
+            type: 'postgres',
+            url: config.get<string>('DATABASE_URL'),
+            autoLoadEntities: true,
+            synchronize: false,
+            ssl: {
+              rejectUnauthorized: false,
+            },
+          };
+        }
+
+        return {
+          type: 'postgres',
+          host: 'localhost',
+          port: 5432,
+          username: 'postgres',
+          password: 'root',
+          database: 'automated-ependymoma-detection',
+          autoLoadEntities: true,
+          synchronize: true,
+        };
+      },
     }),
+
     ScansModule,
   ],
   controllers: [AppController],
