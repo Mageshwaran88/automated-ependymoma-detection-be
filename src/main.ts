@@ -1,5 +1,4 @@
-import { webcrypto } from 'crypto';
-(globalThis as any).crypto = webcrypto;
+import './crypto-polyfill';
 
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
@@ -30,4 +29,8 @@ async function bootstrap() {
   await app.listen(port, '0.0.0.0');
   console.log(`Nest app listening on 0.0.0.0:${port} (PORT=${process.env.PORT ?? 'not set'})`);
 }
-bootstrap();
+
+bootstrap().catch((err) => {
+  console.error('Fatal: app failed to start:', err?.message || err);
+  process.exit(1);
+});

@@ -39,7 +39,7 @@ let ScansService = class ScansService {
             report: dto.report ?? null,
             report_text: dto.report_text ?? null,
         });
-        return this.scanResultRepository.save(entity);
+        return await this.scanResultRepository.save(entity);
     }
     async findAll() {
         return this.scanResultRepository.find({

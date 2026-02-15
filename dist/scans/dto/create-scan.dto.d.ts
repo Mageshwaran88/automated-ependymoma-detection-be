@@ -1,5 +1,4 @@
 export declare class CreateScanDto {
-    imagePath?: string | null;
     scan_id: string;
     timestamp: string;
     patient_id: string;
@@ -11,7 +10,8 @@ export declare class CreateScanDto {
     volume: number;
     max_diameter: number;
     processing_time: number;
-    reason?: string | null;
-    report?: string[] | null;
-    report_text?: string | null;
+    imagePath?: string;
+    reason?: string;
+    report?: string[];
+    report_text?: string;
 }

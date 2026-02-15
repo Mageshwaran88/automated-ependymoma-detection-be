@@ -26,16 +26,17 @@ exports.AppModule = AppModule = __decorate([
                 imports: [config_1.ConfigModule],
                 inject: [config_1.ConfigService],
                 useFactory: (config) => {
-                    const isProduction = config.get('NODE_ENV') === 'production';
-                    if (isProduction) {
+                    const dbUrl = config.get('DATABASE_URL');
+                    if (!dbUrl) {
+                        console.warn('DATABASE_URL not set — DB features will fail. Set DATABASE_URL in Railway Variables (e.g. Neon connection string).');
+                    }
+                    if (dbUrl) {
                         return {
                             type: 'postgres',
-                            url: config.get('DATABASE_URL'),
+                            url: dbUrl,
                             autoLoadEntities: true,
                             synchronize: false,
-                            ssl: {
-                                rejectUnauthorized: false,
-                            },
+                            ssl: { rejectUnauthorized: false },
                         };
                     }
                     return {
@@ -48,7 +49,7 @@ exports.AppModule = AppModule = __decorate([
                         autoLoadEntities: true,
                         synchronize: true,
                     };
-                },
+                }
             }),
             scans_module_1.ScansModule,
         ],

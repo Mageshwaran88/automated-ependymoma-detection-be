@@ -22,7 +22,11 @@ let ScansController = class ScansController {
     }
     async create(dto) {
         const scan = await this.scansService.create(dto);
-        return { id: scan.id, scan_id: scan.scan_id, message: 'Scan result saved' };
+        return {
+            id: scan.id,
+            scan_id: scan.scan_id,
+            message: 'Scan result saved successfully',
+        };
     }
     async findAll() {
         return this.scansService.findAll();

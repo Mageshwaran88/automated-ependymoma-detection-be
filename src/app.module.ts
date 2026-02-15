@@ -17,19 +17,21 @@ import { ScansModule } from './scans/scans.module';
       useFactory: (config: ConfigService) => {
         const dbUrl = config.get<string>('DATABASE_URL');
 
+        if (!dbUrl) {
+          console.warn('DATABASE_URL not set — DB features will fail. Set DATABASE_URL in Railway Variables (e.g. Neon connection string).');
+        }
+
         if (dbUrl) {
           return {
             type: 'postgres',
             url: dbUrl,
             autoLoadEntities: true,
             synchronize: false,
-            ssl: {
-              rejectUnauthorized: false,
-            },
+            ssl: { rejectUnauthorized: false },
           };
         }
 
-        // fallback local
+        // fallback local (will fail on Railway if DATABASE_URL is missing)
         return {
           type: 'postgres',
           host: 'localhost',
