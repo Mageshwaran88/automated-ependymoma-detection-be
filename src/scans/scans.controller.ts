@@ -4,6 +4,9 @@ import {
   Get,
   Param,
   Post,
+  HttpCode,
+  HttpStatus,
+  HttpException,
 } from '@nestjs/common';
 import { ScansService } from './scans.service';
 import { CreateScanDto } from './dto/create-scan.dto';
@@ -14,13 +17,24 @@ export class ScansController {
 
   // POST /scan/image
   @Post('image')
+  @HttpCode(HttpStatus.CREATED)
   async create(@Body() dto: CreateScanDto) {
-    const scan = await this.scansService.create(dto);
-    return {
-      id: scan.id,
-      scan_id: scan.scan_id,
-      message: 'Scan result saved successfully',
-    };
+    try {
+      const scan = await this.scansService.create(dto);
+      return {
+        id: scan.id,
+        scan_id: scan.scan_id,
+        message: 'Scan result saved successfully',
+      };
+    } catch (err: any) {
+      const message = err?.message || String(err);
+      const code = err?.code || err?.driverError?.code;
+      console.error('POST /scan/image failed:', code, message);
+      throw new HttpException(
+        { message: 'Scan save failed', error: message, code: code || 'UNKNOWN' },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   // GET /scan

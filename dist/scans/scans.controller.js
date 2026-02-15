@@ -21,12 +21,20 @@ let ScansController = class ScansController {
         this.scansService = scansService;
     }
     async create(dto) {
-        const scan = await this.scansService.create(dto);
-        return {
-            id: scan.id,
-            scan_id: scan.scan_id,
-            message: 'Scan result saved successfully',
-        };
+        try {
+            const scan = await this.scansService.create(dto);
+            return {
+                id: scan.id,
+                scan_id: scan.scan_id,
+                message: 'Scan result saved successfully',
+            };
+        }
+        catch (err) {
+            const message = err?.message || String(err);
+            const code = err?.code || err?.driverError?.code;
+            console.error('POST /scan/image failed:', code, message);
+            throw new common_1.HttpException({ message: 'Scan save failed', error: message, code: code || 'UNKNOWN' }, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
     async findAll() {
         return this.scansService.findAll();
@@ -38,6 +46,7 @@ let ScansController = class ScansController {
 exports.ScansController = ScansController;
 __decorate([
     (0, common_1.Post)('image'),
+    (0, common_1.HttpCode)(common_1.HttpStatus.CREATED),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_scan_dto_1.CreateScanDto]),

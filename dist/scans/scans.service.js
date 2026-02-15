@@ -22,21 +22,22 @@ let ScansService = class ScansService {
         this.scanResultRepository = scanResultRepository;
     }
     async create(dto) {
+        const num = (v) => (v === undefined || v === null ? 0 : Number(v));
         const entity = this.scanResultRepository.create({
             imagePath: dto.imagePath ?? null,
-            scan_id: dto.scan_id,
+            scan_id: String(dto.scan_id),
             timestamp: new Date(dto.timestamp),
-            patient_id: dto.patient_id,
-            scan_type: dto.scan_type,
-            detected: dto.detected,
-            confidence: dto.confidence,
-            location: dto.location,
-            grade: dto.grade,
-            volume: dto.volume,
-            max_diameter: dto.max_diameter,
-            processing_time: dto.processing_time,
+            patient_id: String(dto.patient_id),
+            scan_type: String(dto.scan_type),
+            detected: Boolean(dto.detected),
+            confidence: num(dto.confidence),
+            location: String(dto.location ?? ''),
+            grade: String(dto.grade ?? ''),
+            volume: num(dto.volume),
+            max_diameter: num(dto.max_diameter),
+            processing_time: num(dto.processing_time),
             reason: dto.reason ?? null,
-            report: dto.report ?? null,
+            report: Array.isArray(dto.report) ? dto.report : (dto.report_text ? [String(dto.report_text)] : null),
             report_text: dto.report_text ?? null,
         });
         return await this.scanResultRepository.save(entity);

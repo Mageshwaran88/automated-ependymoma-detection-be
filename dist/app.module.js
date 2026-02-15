@@ -35,7 +35,7 @@ exports.AppModule = AppModule = __decorate([
                             type: 'postgres',
                             url: dbUrl,
                             autoLoadEntities: true,
-                            synchronize: false,
+                            synchronize: true,
                             ssl: { rejectUnauthorized: false },
                         };
                     }
