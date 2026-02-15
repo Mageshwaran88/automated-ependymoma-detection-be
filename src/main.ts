@@ -1,10 +1,20 @@
 import './crypto-polyfill';
 
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: false,
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
+    }),
+  );
 
   // Handle CORS preflight (OPTIONS) explicitly so proxy/edge never returns 404
   app.use((req: any, res: any, next: () => void) => {

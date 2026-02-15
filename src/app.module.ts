@@ -26,7 +26,7 @@ import { ScansModule } from './scans/scans.module';
             type: 'postgres',
             url: dbUrl,
             autoLoadEntities: true,
-            synchronize: false,
+            synchronize: true, // creates scan_results table on Neon; use migrations later for strict prod
             ssl: { rejectUnauthorized: false },
           };
         }

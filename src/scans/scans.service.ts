@@ -12,26 +12,26 @@ export class ScansService {
   ) {}
 
   async create(dto: CreateScanDto): Promise<ScanResult> {
-  const entity: ScanResult = this.scanResultRepository.create({
-    imagePath: dto.imagePath ?? null,
-    scan_id: dto.scan_id,
-    timestamp: new Date(dto.timestamp),
-    patient_id: dto.patient_id,
-    scan_type: dto.scan_type,
-    detected: dto.detected,
-    confidence: dto.confidence,
-    location: dto.location,
-    grade: dto.grade,
-    volume: dto.volume,
-    max_diameter: dto.max_diameter,
-    processing_time: dto.processing_time,
-    reason: dto.reason ?? null,
-    report: dto.report ?? null, // ✅ array only
-    report_text: dto.report_text ?? null,
-  });
+    const entity = this.scanResultRepository.create({
+      imagePath: dto.imagePath ?? null,
+      scan_id: dto.scan_id,
+      timestamp: new Date(dto.timestamp),
+      patient_id: dto.patient_id,
+      scan_type: dto.scan_type,
+      detected: dto.detected,
+      confidence: Number(dto.confidence),
+      location: dto.location,
+      grade: dto.grade,
+      volume: Number(dto.volume),
+      max_diameter: Number(dto.max_diameter),
+      processing_time: Number(dto.processing_time),
+      reason: dto.reason ?? null,
+      report: Array.isArray(dto.report) ? dto.report : (dto.report_text ? [dto.report_text] : null),
+      report_text: dto.report_text ?? null,
+    });
 
-  return await this.scanResultRepository.save(entity);
-}
+    return await this.scanResultRepository.save(entity);
+  }
 
 
   async findAll(): Promise<ScanResult[]> {
