@@ -1,4 +1,11 @@
-import { IsString, IsOptional, IsBoolean, IsNumber, IsDateString } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsBoolean,
+  IsNumber,
+  IsDateString,
+  IsArray,
+} from 'class-validator';
 
 export class CreateScanDto {
   @IsString()
@@ -35,15 +42,18 @@ export class CreateScanDto {
   processing_time: number;
 
   @IsOptional()
+  @IsString()
   imagePath?: string;
 
   @IsOptional()
   @IsString()
   reason?: string;
 
+  // ✅ MUST BE ARRAY
   @IsOptional()
-  @IsString()
-  report?: string;
+  @IsArray()
+  @IsString({ each: true })
+  report?: string[];
 
   @IsOptional()
   @IsString()
