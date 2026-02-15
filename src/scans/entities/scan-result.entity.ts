@@ -10,51 +10,51 @@ export class ScanResult {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'varchar', nullable: true })
+  @Column({ name: 'imagepath', type: 'varchar', nullable: true })
   imagePath: string | null;
 
-  @Column({ unique: true })
+  @Column({ name: 'scan_id', unique: true })
   scan_id: string;
 
-  @Column({ type: 'timestamptz' })
+  @Column({ name: 'timestamp', type: 'timestamptz' })
   timestamp: Date;
 
-  @Column()
+  @Column({ name: 'patient_id' })
   patient_id: string;
 
-  @Column()
+  @Column({ name: 'scan_type' })
   scan_type: string;
 
-  @Column({ default: false })
+  @Column({ name: 'detected', default: false })
   detected: boolean;
 
-  @Column({ type: 'decimal', precision: 5, scale: 2, default: 0 })
+  @Column({ name: 'confidence', type: 'decimal', precision: 5, scale: 2, default: 0 })
   confidence: number;
 
-  @Column({ default: '' })
+  @Column({ name: 'location', default: '' })
   location: string;
 
-  @Column({ default: '' })
+  @Column({ name: 'grade', default: '' })
   grade: string;
 
-  @Column({ type: 'decimal', precision: 8, scale: 2, default: 0 })
+  @Column({ name: 'volume', type: 'decimal', precision: 8, scale: 2, default: 0 })
   volume: number;
 
-  @Column({ type: 'decimal', precision: 8, scale: 2, default: 0 })
+  @Column({ name: 'max_diameter', type: 'decimal', precision: 8, scale: 2, default: 0 })
   max_diameter: number;
 
-  @Column({ type: 'decimal', precision: 6, scale: 2, default: 0 })
+  @Column({ name: 'processing_time', type: 'decimal', precision: 6, scale: 2, default: 0 })
   processing_time: number;
 
-  @Column({ type: 'text', nullable: true })
+  @Column({ name: 'reason', type: 'text', nullable: true })
   reason: string | null;
 
-  @Column({ type: 'jsonb', nullable: true })
+  @Column({ name: 'report', type: 'jsonb', nullable: true })
   report: string[] | null;
 
-  @Column({ type: 'text', nullable: true })
+  @Column({ name: 'report_text', type: 'text', nullable: true })
   report_text: string | null;
 
-  @CreateDateColumn({ type: 'timestamptz' })
+  @CreateDateColumn({ name: 'createdat', type: 'timestamptz' })
   createdAt: Date;
 }
