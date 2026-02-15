@@ -8,6 +8,7 @@ export declare class ScansController {
         scan_id: string;
         message: string;
     }>;
+    getHistory(): Promise<import("./entities/scan-result.entity").ScanResult[]>;
     findAll(): Promise<import("./entities/scan-result.entity").ScanResult[]>;
     findOne(scan_id: string): Promise<import("./entities/scan-result.entity").ScanResult | null>;
 }

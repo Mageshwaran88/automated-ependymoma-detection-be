@@ -36,6 +36,9 @@ let ScansController = class ScansController {
             throw new common_1.HttpException({ message: 'Scan save failed', error: message, code: code || 'UNKNOWN' }, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    async getHistory() {
+        return this.scansService.findAll();
+    }
     async findAll() {
         return this.scansService.findAll();
     }
@@ -52,6 +55,12 @@ __decorate([
     __metadata("design:paramtypes", [create_scan_dto_1.CreateScanDto]),
     __metadata("design:returntype", Promise)
 ], ScansController.prototype, "create", null);
+__decorate([
+    (0, common_1.Get)('history'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], ScansController.prototype, "getHistory", null);
 __decorate([
     (0, common_1.Get)(),
     __metadata("design:type", Function),

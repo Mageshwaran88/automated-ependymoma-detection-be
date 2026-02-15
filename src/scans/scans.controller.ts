@@ -37,13 +37,19 @@ export class ScansController {
     }
   }
 
-  // GET /scan
+  // GET /scan/history — list all scan results (must be before :scan_id)
+  @Get('history')
+  async getHistory() {
+    return this.scansService.findAll();
+  }
+
+  // GET /scan — list all (alias)
   @Get()
   async findAll() {
     return this.scansService.findAll();
   }
 
-  // GET /scan/:scan_id
+  // GET /scan/:scan_id — single scan by scan_id
   @Get(':scan_id')
   async findOne(@Param('scan_id') scan_id: string) {
     return this.scansService.findByScanId(scan_id);
