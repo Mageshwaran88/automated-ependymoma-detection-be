@@ -35,7 +35,6 @@ export class CreateScanDto {
   processing_time: number;
 
   @IsOptional()
-  @IsString()
   imagePath?: string;
 
   @IsOptional()

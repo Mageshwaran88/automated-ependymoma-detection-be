@@ -26,7 +26,7 @@ export class ScansService {
       max_diameter: dto.max_diameter,
       processing_time: dto.processing_time,
       reason: dto.reason ?? null,
-      report: dto.report ?? null,
+      report: dto.report ? dto.report : null,
       report_text: dto.report_text ?? null,
     });
     return this.scanResultRepository.save(entity);
