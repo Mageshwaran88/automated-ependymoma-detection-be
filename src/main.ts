@@ -28,5 +28,6 @@ async function bootstrap() {
 
   const port = process.env.PORT || 7000;
   await app.listen(port, '0.0.0.0');
+  console.log(`Nest app listening on 0.0.0.0:${port} (PORT=${process.env.PORT ?? 'not set'})`);
 }
 bootstrap();
