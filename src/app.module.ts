@@ -14,40 +14,27 @@ import { ScansModule } from './scans/scans.module';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => {
-        const dbUrl = config.get<string>('DATABASE_URL');
 
-        if (!dbUrl) {
-          console.warn('DATABASE_URL not set — DB features will fail. Set DATABASE_URL in Railway Variables (e.g. Neon connection string).');
-        }
+      useFactory: async (config: ConfigService) => ({
+        type: 'postgres',
 
-        if (dbUrl) {
-          return {
-            type: 'postgres',
-            url: dbUrl,
-            autoLoadEntities: true,
-            synchronize: true, // creates scan_results table on Neon; use migrations later for strict prod
-            ssl: { rejectUnauthorized: false },
-          };
-        }
+        url: config.get<string>('DATABASE_URL'),
 
-        // fallback local (will fail on Railway if DATABASE_URL is missing)
-        return {
-          type: 'postgres',
-          host: 'localhost',
-          port: 5432,
-          username: 'postgres',
-          password: 'root',
-          database: 'automated-ependymoma-detection',
-          autoLoadEntities: true,
-          synchronize: true,
-        };
-      }
+        autoLoadEntities: true,
+
+        synchronize: true,
+
+        ssl:
+          config.get('NODE_ENV') === 'production'
+            ? { rejectUnauthorized: false }
+            : false,
+      }),
     }),
 
     ScansModule,
   ],
+
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}
