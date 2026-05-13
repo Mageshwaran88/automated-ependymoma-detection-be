@@ -25,31 +25,15 @@ exports.AppModule = AppModule = __decorate([
             typeorm_1.TypeOrmModule.forRootAsync({
                 imports: [config_1.ConfigModule],
                 inject: [config_1.ConfigService],
-                useFactory: (config) => {
-                    const dbUrl = config.get('DATABASE_URL');
-                    if (!dbUrl) {
-                        console.warn('DATABASE_URL not set — DB features will fail. Set DATABASE_URL in Railway Variables (e.g. Neon connection string).');
-                    }
-                    if (dbUrl) {
-                        return {
-                            type: 'postgres',
-                            url: dbUrl,
-                            autoLoadEntities: true,
-                            synchronize: true,
-                            ssl: { rejectUnauthorized: false },
-                        };
-                    }
-                    return {
-                        type: 'postgres',
-                        host: 'localhost',
-                        port: 5432,
-                        username: 'postgres',
-                        password: 'root',
-                        database: 'automated-ependymoma-detection',
-                        autoLoadEntities: true,
-                        synchronize: true,
-                    };
-                }
+                useFactory: async (config) => ({
+                    type: 'postgres',
+                    url: config.get('DATABASE_URL'),
+                    autoLoadEntities: true,
+                    synchronize: true,
+                    ssl: config.get('NODE_ENV') === 'production'
+                        ? { rejectUnauthorized: false }
+                        : false,
+                }),
             }),
             scans_module_1.ScansModule,
         ],
